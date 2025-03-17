@@ -1,23 +1,24 @@
 using UnityEngine;
+using UnityEngine.UI;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class UIHealth : MonoBehaviour
 {
-    public float value; // Attribute
+    public Image healthValue;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
-    private void Update() // Method
+    void Update()
     {
         
     }
 
-    private void Hello()
+    public void UpdateHealth(float health)
     {
-
+        healthValue.transform.localScale = new Vector3(health / 100, 1, 1);
     }
 }
