@@ -3040,6 +3040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axeData: {fileID: 11400000, guid: c03932c86bd4b7f45b82cf22b54cebf8, type: 2}
   gunData: {fileID: 11400000, guid: e11420dd9f857c94cab071c8ddf4ff6f, type: 2}
+  projectile: {fileID: 7392423925569940372, guid: f0cfcd182df2dd34580240604938ebcb, type: 3}
 --- !u!1001 &347361491674761692
 PrefabInstance:
   m_ObjectHideFlags: 0

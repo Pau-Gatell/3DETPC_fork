@@ -3,6 +3,8 @@ using UnityEngine.Events;
 
 public class PlayerHealthController : MonoBehaviour
 {
+    public static PlayerHealthController Instance;
+
     public float health = 100f;
 
     public static UnityEvent<float> damageEvent;
@@ -10,7 +12,8 @@ public class PlayerHealthController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
-
+        if(Instance == null)
+            Instance = this;
     }
 
     // Update is called once per frame

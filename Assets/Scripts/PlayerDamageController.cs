@@ -2,17 +2,29 @@ using UnityEngine;
 
 public class PlayerDamageController : MonoBehaviour
 {
+    public static PlayerDamageController Instance;
+
     private Weapon weaponPrimary;
 
     public WeaponData axeData;
     public WeaponData gunData;
+    public Transform projectile;
 
     private int weaponUse;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+
         weaponPrimary = new WeaponAxe(axeData);
+    }
+
+    private void Start()
+    {
+        ProjectileController proj = new ProjectileController();
+        proj.Init(5, projectile);
     }
 
     // Update is called once per frame
@@ -26,7 +38,7 @@ public class PlayerDamageController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            weaponPrimary = new WeaponGun(gunData);
+            weaponPrimary = new WeaponGun(gunData, projectile);
             Debug.Log("Primary weapon changed to [GUN]");
         }
 
