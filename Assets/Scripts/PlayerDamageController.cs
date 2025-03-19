@@ -4,12 +4,15 @@ public class PlayerDamageController : MonoBehaviour
 {
     private Weapon weaponPrimary;
 
+    public WeaponData axeData;
+    public WeaponData gunData;
+
     private int weaponUse;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        weaponPrimary = new WeaponAxe();
+        weaponPrimary = new WeaponAxe(axeData);
     }
 
     // Update is called once per frame
@@ -17,13 +20,13 @@ public class PlayerDamageController : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            weaponPrimary = new WeaponAxe();
+            weaponPrimary = new WeaponAxe(axeData);
             Debug.Log("Primary weapon changed to [AXE]");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            weaponPrimary = new WeaponGun();
+            weaponPrimary = new WeaponGun(gunData);
             Debug.Log("Primary weapon changed to [GUN]");
         }
 
