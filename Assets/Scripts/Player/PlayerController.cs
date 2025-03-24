@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
         float moveY = Input.GetAxis("Vertical");
         bool space = Input.GetButtonDown("Jump");
 
-        _horizontalMove = transform.forward * moveY + transform.right * moveX;
+        _horizontalMove = Camera.main.transform.forward * moveY + Camera.main.transform.right * moveX;
         _horizontalMove *= model.speed;
 
         if (Physics.Raycast(transform.position , -Vector3.up, 0.2f, model.layerMask))
@@ -55,12 +55,12 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                _verticalMove += -Vector3.up * model.gravity;
+                _verticalMove = -Vector3.up * model.gravity;
             }
         }
         else
         {
-            _verticalMove += -Vector3.up * model.gravity;
+            _verticalMove = -Vector3.up * model.gravity;
         }
 
         // Temp
