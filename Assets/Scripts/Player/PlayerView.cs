@@ -25,8 +25,7 @@ public class PlayerView : MonoBehaviour
     {
         // TO-DO 
         // Updates player position and rotation
-        _ctr.Move(horizontalMove * Time.deltaTime);
-        _ctr.Move(verticalMove * Time.deltaTime);
+        _ctr.Move((horizontalMove + verticalMove) * Time.deltaTime);
     }
 
     public void UpdateRender()

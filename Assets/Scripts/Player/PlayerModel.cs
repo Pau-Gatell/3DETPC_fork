@@ -6,6 +6,6 @@ public class PlayerModel : ScriptableObject
 {
     public float speed = 15f;
     public float gravity = 9.8f;
-    public float jumpGravity = 1f;
+    public float jumpGravity = 4f;
     public LayerMask layerMask;
 }

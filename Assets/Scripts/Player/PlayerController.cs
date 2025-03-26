@@ -2,11 +2,15 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
     [SerializeField]
     public PlayerModel model;
     private PlayerView _view;
     private CharacterController _ctr;
     private PlayerStateMachine _fsm;
+
+    private DoubleJumpSkill doubleJump;
 
     private Vector3 _horizontalMove;
     private Vector3 _verticalMove;
@@ -15,6 +19,9 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        Instance = this;
+        doubleJump = new DoubleJumpSkill();
+
         _view = transform.parent.GetComponentInChildren<PlayerView>();
         _ctr = transform.parent.GetComponentInChildren<CharacterController>();
         _fsm = transform.parent.GetComponentInChildren<PlayerStateMachine>();
@@ -34,9 +41,11 @@ public class PlayerController : MonoBehaviour
         bool space = Input.GetButtonDown("Jump");
 
         _horizontalMove = Camera.main.transform.forward * moveY + Camera.main.transform.right * moveX;
+        _horizontalMove = _horizontalMove.normalized;
         _horizontalMove *= model.speed;
+        _horizontalMove.y = 0;
 
-        if (Physics.Raycast(transform.position , -Vector3.up, 0.2f, model.layerMask))
+        if (Physics.Raycast(_view.transform.position , -Vector3.up, 0.3f, model.layerMask))
         {
             Debug.Log("Grounded");
             _grounded = true;
@@ -50,34 +59,22 @@ public class PlayerController : MonoBehaviour
         {
             if(space)
             {
-                _verticalMove = Vector3.up * 10f;
+                _verticalMove.y = model.jumpGravity;
                 Debug.Log("Jump");
             }
             else
             {
-                _verticalMove = -Vector3.up * model.gravity;
+                _verticalMove.y = 0;
             }
-        }
-        else
-        {
-            _verticalMove = -Vector3.up * model.gravity;
         }
 
-        // Temp
-        if(_horizontalMove.magnitude > 0 || _verticalMove.y > 0 )
+        if(doubleJump.Use())
         {
-            if(_verticalMove.y > 0)
-            {
-                _fsm.ChangeState(PlayerStateMachine.StateType.JUMP);
-            }
-            else if (_horizontalMove.magnitude > 0)
-            {
-                _fsm.ChangeState(PlayerStateMachine.StateType.WALK);
-            }
+            _verticalMove.y = doubleJump.jumpValue;
         }
-        else
+        else if (!_grounded)
         {
-            _fsm.ChangeState(PlayerStateMachine.StateType.IDLE);
+            _verticalMove.y += -model.gravity * Time.deltaTime;
         }
     }
 
@@ -85,5 +82,10 @@ public class PlayerController : MonoBehaviour
     {
         _view.UpdateCharacter(_horizontalMove, _verticalMove);
         _view.UpdateTransform();
+    }
+
+    public bool IsGrounded()
+    {
+        return _grounded;
     }
 }
