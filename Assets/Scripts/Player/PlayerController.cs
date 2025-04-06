@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     private PlayerView _view;
     private CharacterController _ctr;
     private PlayerStateMachine _fsm;
+    private Animator _animator;
 
     private DoubleJumpSkill doubleJump;
 
@@ -22,9 +23,12 @@ public class PlayerController : MonoBehaviour
         Instance = this;
         doubleJump = new DoubleJumpSkill();
 
+        _animator = transform.parent.GetComponentInChildren<Animator>();
         _view = transform.parent.GetComponentInChildren<PlayerView>();
         _ctr = transform.parent.GetComponentInChildren<CharacterController>();
         _fsm = transform.parent.GetComponentInChildren<PlayerStateMachine>();
+
+        Cursor.visible = false;
     }
 
     // Update is called once per frame
@@ -44,6 +48,7 @@ public class PlayerController : MonoBehaviour
         _horizontalMove = _horizontalMove.normalized;
         _horizontalMove *= model.speed;
         _horizontalMove.y = 0;
+        _animator.SetFloat("Speed", _horizontalMove.magnitude);
 
         if (Physics.Raycast(_view.transform.position , -Vector3.up, 0.3f, model.layerMask))
         {
@@ -76,12 +81,27 @@ public class PlayerController : MonoBehaviour
         {
             _verticalMove.y += -model.gravity * Time.deltaTime;
         }
+
+        PlayerRotation();
     }
 
     void UpdateView()
     {
         _view.UpdateCharacter(_horizontalMove, _verticalMove);
         _view.UpdateTransform();
+    }
+
+    void PlayerRotation()
+    {
+        if (_horizontalMove.magnitude > 0.1f) // Rotate only when moving
+        {
+            float targetAngle = Mathf.Atan2(_horizontalMove.x,_horizontalMove.z) * Mathf.Rad2Deg;
+            Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
+
+            _view.transform.rotation = Quaternion.Slerp(
+            _view.transform.rotation, targetRotation, Time.deltaTime * model.rotationSpeed);
+        }
+
     }
 
     public bool IsGrounded()
