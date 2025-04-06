@@ -6,6 +6,7 @@ public class PlayerHealthController : MonoBehaviour
     public static PlayerHealthController Instance;
 
     public float health = 100f;
+    public float MaxHealth = 100f;
 
     public static UnityEvent<float> damageEvent;
 
@@ -35,8 +36,16 @@ public class PlayerHealthController : MonoBehaviour
     // Regenerate health
     public void RegenHealth(float hp)
     {
-        health = health + hp;
+        health = Mathf.Clamp(health + hp, 0, MaxHealth);
 
         damageEvent.Invoke(health);
+    }
+
+    public bool CanRegen()
+    {
+        if (health < MaxHealth)
+            return true;
+
+        return false;
     }
 }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class DamageActor : MonoBehaviour
 {
     public float damage;
+    public bool isRegen = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -18,17 +19,19 @@ public class DamageActor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PlayerHealthController hCtr = other.GetComponent<PlayerHealthController>();
+        PlayerHealthController hCtr = other.transform.parent.GetComponentInChildren<PlayerHealthController>();
 
-        if(damage > 0)
+        if (isRegen && hCtr.CanRegen())
         {
             hCtr.RegenHealth(damage);
+
+            Destroy(this.gameObject);
         }
-        else
+        else if(!isRegen)
         {
             hCtr.TakeDamage(damage);
-        }
 
-        Destroy(this.gameObject);
+            Destroy(this.gameObject);
+        }
     }
 }

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 293912732758983533}
   - component: {fileID: 6937317586633038721}
   - component: {fileID: 5252378702256409539}
+  - component: {fileID: 2706437466021801333}
   m_Layer: 0
   m_Name: RegenHealth
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8233756706567094683}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.70361555, y: -0, z: -0, w: 0.71058095}
+  m_LocalRotation: {x: -0.70361805, y: 0, z: 0, w: 0.71057844}
   m_LocalPosition: {x: -0.85641927, y: 1.95, z: 6.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -379,7 +380,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 1759
+  m_VersionIndex: 1765
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -418,7 +419,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8233756706567094683}
   m_Enabled: 1
-  m_CastShadows: 1
+  m_CastShadows: 0
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -497,3 +498,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 20
+  isRegen: 1
+--- !u!114 &2706437466021801333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8233756706567094683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8978a65b3189aba4aa29f33ef9969cc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  amplitude: 0.3
+  frequency: 1
