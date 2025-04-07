@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -16,6 +17,9 @@ public class PlayerController : MonoBehaviour
     private Vector3 _horizontalMove;
     private Vector3 _verticalMove;
     private bool _grounded;
+    private bool _attacking = false;
+
+    public LayerMask attackMask;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -35,6 +39,10 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleInput();
+
+        if (_attacking)
+            return;
+
         UpdateView();
     }
 
@@ -49,6 +57,14 @@ public class PlayerController : MonoBehaviour
         _horizontalMove *= model.speed;
         _horizontalMove.y = 0;
         _animator.SetFloat("Speed", _horizontalMove.magnitude);
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("Player Attacked");
+            _animator.SetBool("Attack", true);
+            _attacking = true;
+            StartCoroutine(AttackTransition());
+        }
 
         if (Physics.Raycast(_view.transform.position , -Vector3.up, 0.3f, model.layerMask))
         {
@@ -107,5 +123,22 @@ public class PlayerController : MonoBehaviour
     public bool IsGrounded()
     {
         return _grounded;
+    }
+
+    IEnumerator AttackTransition()
+    {
+        bool hit = Physics.SphereCast(transform.position + new Vector3(0, 1f, 0), 2f, transform.forward, out RaycastHit hitInfo, 1f, attackMask);
+
+        if (hit)
+        {
+            AIPatrol patrol = hitInfo.collider.GetComponent<AIPatrol>();
+            patrol.Kill();
+            Debug.Log("Le he dado al enemigo");
+        }
+
+        yield return new WaitForSeconds(1f);
+
+        _animator.SetBool("Attack", false);
+        _attacking = false;
     }
 }

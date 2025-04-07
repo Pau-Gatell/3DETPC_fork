@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,6 +15,9 @@ public class AIPatrol : MonoBehaviour
     private int _currentWaypoint;
     private bool playerInRange;
     private float _threshold;
+
+    private bool _chasePlayer;
+    private bool _changeState;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -42,16 +46,21 @@ public class AIPatrol : MonoBehaviour
                 if(hit && hitInfo.collider.tag == player.tag)
                 {
                     agent.SetDestination(player.position);
+
+                    if (agent.remainingDistance < 1.5f)
+                        agent.isStopped = true;
+                    else
+                        agent.isStopped = false;
+
                     return;
                 }
             }
         }
 
-        if(agent.remainingDistance < 0.1f) // Perseguimos nuestro ultimo waypoint
+        if(!_changeState && agent.remainingDistance < 0.1f) // Perseguimos nuestro ultimo waypoint
         {
             // Nuevo waypoint objetivo.
-            _currentWaypoint = (_currentWaypoint + 1) % waypoints.Length;
-            agent.SetDestination(waypoints[_currentWaypoint].position);
+            StartCoroutine(WalkIdle());
         }
 
         _animator.SetFloat("Speed", agent.speed);
@@ -65,6 +74,7 @@ public class AIPatrol : MonoBehaviour
     private void OnTriggerExit(Collider other)
     {
         playerInRange = false;
+        _chasePlayer = false;
     }
 
     private void OnDrawGizmos()
@@ -84,5 +94,21 @@ public class AIPatrol : MonoBehaviour
 
         UnityEditor.Handles.DrawSolidArc(transform.position, Vector3.up, leftBoundary, fovAngle, col.radius);
 #endif
+    }
+
+    IEnumerator WalkIdle()
+    {
+        _changeState = true;
+        yield return new WaitForSeconds(4f);
+        _currentWaypoint = (_currentWaypoint + 1) % waypoints.Length;
+        agent.SetDestination(waypoints[_currentWaypoint].position);
+        _changeState = false;
+    }
+
+    public void Kill()
+    {
+        _animator.SetBool("Death", true);
+        agent.isStopped = true;
+        enabled = false;
     }
 }

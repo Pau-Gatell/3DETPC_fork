@@ -20,7 +20,13 @@ public class PlayerHealthController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(health <= 0)
+        {
+            Animator anim = transform.parent.GetComponentInChildren<Animator>();
+            Debug.Log("Player is dead");
+            anim.SetBool("Death", true);    
+            gameObject.SetActive(false);
+        }
     }
 
     // Take damage
