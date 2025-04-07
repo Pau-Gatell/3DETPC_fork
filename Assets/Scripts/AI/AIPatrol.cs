@@ -7,6 +7,9 @@ public class AIPatrol : MonoBehaviour
     public Transform player;
     public Transform[] waypoints;
     public float fovAngle = 65f;
+    public Transform eyes;
+
+    private Animator _animator;
 
     private int _currentWaypoint;
     private bool playerInRange;
@@ -20,6 +23,8 @@ public class AIPatrol : MonoBehaviour
 
         float halfFOV = fovAngle / 2f;
         _threshold = Mathf.Cos(halfFOV * Mathf.Deg2Rad);
+
+        _animator = GetComponentInChildren<Animator>();
     }
 
     // Update is called once per frame
@@ -32,8 +37,13 @@ public class AIPatrol : MonoBehaviour
 
             if(Vector3.Dot(agentDir, playerDir) > _threshold)
             {
-                agent.SetDestination(player.position);
-                return;
+                bool hit = Physics.SphereCast(eyes.position, 0.15f, transform.forward, out RaycastHit hitInfo);
+
+                if(hit && hitInfo.collider.tag == player.tag)
+                {
+                    agent.SetDestination(player.position);
+                    return;
+                }
             }
         }
 
@@ -43,6 +53,8 @@ public class AIPatrol : MonoBehaviour
             _currentWaypoint = (_currentWaypoint + 1) % waypoints.Length;
             agent.SetDestination(waypoints[_currentWaypoint].position);
         }
+
+        _animator.SetFloat("Speed", agent.speed);
     }
 
     private void OnTriggerEnter(Collider other)
