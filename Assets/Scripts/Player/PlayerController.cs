@@ -97,27 +97,13 @@ public class PlayerController : MonoBehaviour
         {
             _verticalMove.y += -model.gravity * Time.deltaTime;
         }
-
-        PlayerRotation();
     }
 
     void UpdateView()
     {
+        _view.UpdateRotation(_horizontalMove, model.rotationSpeed);
         _view.UpdateCharacter(_horizontalMove, _verticalMove);
         _view.UpdateTransform();
-    }
-
-    void PlayerRotation()
-    {
-        if (_horizontalMove.magnitude > 0.1f) // Rotate only when moving
-        {
-            float targetAngle = Mathf.Atan2(_horizontalMove.x,_horizontalMove.z) * Mathf.Rad2Deg;
-            Quaternion targetRotation = Quaternion.Euler(0f, targetAngle, 0f);
-
-            _view.transform.rotation = Quaternion.Slerp(
-            _view.transform.rotation, targetRotation, Time.deltaTime * model.rotationSpeed);
-        }
-
     }
 
     public bool IsGrounded()

@@ -63,7 +63,7 @@ public class AIPatrol : MonoBehaviour
             StartCoroutine(WalkIdle());
         }
 
-        _animator.SetFloat("Speed", agent.speed);
+        _animator.SetFloat("Speed", agent.velocity.magnitude);
     }
 
     private void OnTriggerEnter(Collider other)
