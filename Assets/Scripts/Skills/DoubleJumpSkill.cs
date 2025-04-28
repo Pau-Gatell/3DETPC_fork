@@ -9,7 +9,6 @@ public class DoubleJumpSkill : SkillBase
     {
         base.Use();
         bool space = Input.GetButtonDown("Jump");
-        Debug.Log("Double Jumping");
 
         if (!PlayerController.Instance.IsGrounded())
         {

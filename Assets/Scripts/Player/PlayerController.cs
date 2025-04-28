@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _verticalMove;
     private bool _grounded;
     private bool _attacking = false;
+    private bool _running = false;
 
     public LayerMask attackMask;
 
@@ -47,14 +48,15 @@ public class PlayerController : MonoBehaviour
     }
 
     void HandleInput()
-    {
+    { 
         float moveX = Input.GetAxis("Horizontal");
         float moveY = Input.GetAxis("Vertical");
         bool space = Input.GetButtonDown("Jump");
 
+        float speed = _running ? model.runSpeed : model.speed;
         _horizontalMove = Camera.main.transform.forward * moveY + Camera.main.transform.right * moveX;
         _horizontalMove = _horizontalMove.normalized;
-        _horizontalMove *= model.speed;
+        _horizontalMove *= speed;
         _horizontalMove.y = 0;
         _animator.SetFloat("Speed", _horizontalMove.magnitude);
 
@@ -64,6 +66,17 @@ public class PlayerController : MonoBehaviour
             _animator.SetBool("Attack", true);
             _attacking = true;
             StartCoroutine(AttackTransition());
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            _animator.SetBool("Run", true);
+            _running = true;
+        }
+        else if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            _animator.SetBool("Run", false);
+            _running = false;
         }
 
         if (Physics.Raycast(_view.transform.position , -Vector3.up, 0.3f, model.layerMask))
@@ -113,13 +126,21 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator AttackTransition()
     {
-        bool hit = Physics.SphereCast(transform.position + new Vector3(0, 1f, 0), 2f, transform.forward, out RaycastHit hitInfo, 1f, attackMask);
+        bool hit = Physics.SphereCast(transform.position + new Vector3(0, 1f, 0), 2f, transform.forward, out RaycastHit hitInfo, 3f, attackMask);
 
         if (hit)
         {
             AIPatrol patrol = hitInfo.collider.GetComponent<AIPatrol>();
-            patrol.Kill();
-            Debug.Log("Le he dado al enemigo");
+            if(patrol)
+            {
+                patrol.Kill();
+                Debug.Log("Le he dado al enemigo");
+            }
+            Debug.Log(hitInfo.collider.name);
+        }
+        else
+        {
+            Debug.Log("no hit");
         }
 
         yield return new WaitForSeconds(1f);

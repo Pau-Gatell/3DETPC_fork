@@ -33,6 +33,7 @@ public class PlayerView : MonoBehaviour
 
             transform.rotation = Quaternion.Slerp(
             transform.rotation, targetRotation, Time.deltaTime * speed);
+            _pctr.transform.rotation = transform.rotation;
         }
     }
 
