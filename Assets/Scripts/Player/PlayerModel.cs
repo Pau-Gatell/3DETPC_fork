@@ -9,5 +9,6 @@ public class PlayerModel : ScriptableObject
     public float gravity = 9.8f;
     public float jumpGravity = 4f;
     public float rotationSpeed = 5f;
+    public float attackDistance = 1f;
     public LayerMask layerMask;
 }

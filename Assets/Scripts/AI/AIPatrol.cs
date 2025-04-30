@@ -9,6 +9,7 @@ public class AIPatrol : MonoBehaviour
     public Transform[] waypoints;
     public float fovAngle = 65f;
     public Transform eyes;
+    public StateMachine StateMachine;
 
     private Animator _animator;
 
@@ -34,35 +35,6 @@ public class AIPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(playerInRange) // Perseguimos al jugador
-        {
-            Vector3 agentDir = transform.forward;
-            Vector3 playerDir = player.position - transform.position;
-
-            if(Vector3.Dot(agentDir, playerDir) > _threshold)
-            {
-                bool hit = Physics.SphereCast(eyes.position, 0.15f, transform.forward, out RaycastHit hitInfo);
-
-                if (hit && hitInfo.collider.tag == player.tag)
-                {
-                    agent.SetDestination(player.position);
-
-                    if (agent.remainingDistance < 1.5f)
-                        agent.isStopped = true;
-                    else
-                        agent.isStopped = false;
-
-                    return;
-                }
-            }
-        }
-
-        if(!_changeState && agent.remainingDistance < 0.1f) // Perseguimos nuestro ultimo waypoint
-        {
-            // Nuevo waypoint objetivo.
-            StartCoroutine(WalkIdle());
-        }
-
         _animator.SetFloat("Speed", agent.velocity.magnitude);
     }
 
@@ -80,6 +52,38 @@ public class AIPatrol : MonoBehaviour
     private void OnDrawGizmos()
     {
         DrawFOV();
+    }
+
+    private void CheckAttackState()
+    {
+        if (playerInRange) // Perseguimos al jugador
+        {
+            Vector3 agentDir = transform.forward;
+            Vector3 playerDir = player.position - transform.position;
+
+            if (Vector3.Dot(agentDir, playerDir) > _threshold)
+            {
+                bool hit = Physics.SphereCast(eyes.position, 0.15f, transform.forward, out RaycastHit hitInfo);
+
+                if (hit && hitInfo.collider.tag == player.tag)
+                {
+                    agent.SetDestination(player.position);
+
+                    if (agent.remainingDistance < 1.5f)
+                        agent.isStopped = true;
+                    else
+                        agent.isStopped = false;
+
+                    return;
+                }
+            }
+        }
+
+        if (!_changeState && agent.remainingDistance < 0.1f) // Perseguimos nuestro ultimo waypoint
+        {
+            // Nuevo waypoint objetivo.
+            StartCoroutine(WalkIdle());
+        }
     }
 
     private void DrawFOV()

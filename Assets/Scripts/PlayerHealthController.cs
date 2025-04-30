@@ -33,16 +33,16 @@ public class PlayerHealthController : MonoBehaviour
     public void TakeDamage(float dmg)
     {
         health = health + dmg;
+        health = Mathf.Clamp(health, 0, MaxHealth);
 
         damageEvent.Invoke(health);
-        //UIHealth uiHealth = FindObjectOfType<UIHealth>();
-        //uiHealth.UpdateHealth(health);
     }
 
     // Regenerate health
     public void RegenHealth(float hp)
     {
-        health = Mathf.Clamp(health + hp, 0, MaxHealth);
+        health = health + hp;
+        health = Mathf.Clamp(health, 0, MaxHealth);
 
         damageEvent.Invoke(health);
     }

@@ -62,7 +62,6 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Player Attacked");
             _animator.SetBool("Attack", true);
             _attacking = true;
             StartCoroutine(AttackTransition());
@@ -126,21 +125,17 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator AttackTransition()
     {
-        bool hit = Physics.SphereCast(transform.position + new Vector3(0, 1f, 0), 2f, transform.forward, out RaycastHit hitInfo, 3f, attackMask);
+        bool hit = Physics.SphereCast(transform.position + new Vector3(0, 1f, 0), 0.25f, transform.forward, out RaycastHit hitInfo, model.attackDistance, attackMask);
 
         if (hit)
         {
             AIPatrol patrol = hitInfo.collider.GetComponent<AIPatrol>();
+
             if(patrol)
             {
                 patrol.Kill();
-                Debug.Log("Le he dado al enemigo");
+                Debug.Log("Enemy killed " + hitInfo.distance);
             }
-            Debug.Log(hitInfo.collider.name);
-        }
-        else
-        {
-            Debug.Log("no hit");
         }
 
         yield return new WaitForSeconds(1f);
