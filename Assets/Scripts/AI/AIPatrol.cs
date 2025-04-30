@@ -43,7 +43,7 @@ public class AIPatrol : MonoBehaviour
             {
                 bool hit = Physics.SphereCast(eyes.position, 0.15f, transform.forward, out RaycastHit hitInfo);
 
-                if(hit && hitInfo.collider.tag == player.tag)
+                if (hit && hitInfo.collider.tag == player.tag)
                 {
                     agent.SetDestination(player.position);
 
