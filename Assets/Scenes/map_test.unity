@@ -1509,7 +1509,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 217098090}
-  player: {fileID: 312626505}
+  player: {fileID: 1689196102}
   waypoints:
   - {fileID: 1826779235}
   - {fileID: 1242812978}
@@ -1751,11 +1751,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &312626505 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3343039835494187666, guid: 7ab73bddc2d130549a4baf7857e93db6, type: 3}
-  m_PrefabInstance: {fileID: 1733248538300237038}
-  m_PrefabAsset: {fileID: 0}
 --- !u!43 &323010086
 Mesh:
   m_ObjectHideFlags: 0
@@ -14762,6 +14757,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1783613661}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1689196102 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3610795848442086258, guid: 7ab73bddc2d130549a4baf7857e93db6, type: 3}
+  m_PrefabInstance: {fileID: 1733248538300237038}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1709509511
 Mesh:
   m_ObjectHideFlags: 0
