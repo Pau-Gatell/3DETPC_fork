@@ -35,6 +35,7 @@ public class AIPatrol : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CheckPlayerRange();
         _animator.SetFloat("Speed", agent.velocity.magnitude);
     }
 
@@ -49,12 +50,7 @@ public class AIPatrol : MonoBehaviour
         _chasePlayer = false;
     }
 
-    private void OnDrawGizmos()
-    {
-        DrawFOV();
-    }
-
-    private void CheckAttackState()
+    private void CheckPlayerRange()
     {
         if (playerInRange) // Perseguimos al jugador
         {
@@ -86,20 +82,6 @@ public class AIPatrol : MonoBehaviour
         }
     }
 
-    private void DrawFOV()
-    {
-        SphereCollider col = GetComponent<SphereCollider>();
-
-#if UNITY_EDITOR
-        UnityEditor.Handles.color = new Color(1f, 1f, 0f, 0.2f); // Semi-transparent yellow
-        Vector3 forward = transform.forward * col.radius;
-        Vector3 leftBoundary = Quaternion.Euler(0, -fovAngle / 2, 0) * forward;
-        Vector3 rightBoundary = Quaternion.Euler(0, fovAngle / 2, 0) * forward;
-
-        UnityEditor.Handles.DrawSolidArc(transform.position, Vector3.up, leftBoundary, fovAngle, col.radius);
-#endif
-    }
-
     IEnumerator WalkIdle()
     {
         _changeState = true;
@@ -114,5 +96,24 @@ public class AIPatrol : MonoBehaviour
         _animator.SetBool("Death", true);
         agent.isStopped = true;
         enabled = false;
+    }
+
+    private void OnDrawGizmos()
+    {
+        DrawFOV();
+    }
+
+    private void DrawFOV()
+    {
+        SphereCollider col = GetComponent<SphereCollider>();
+
+#if UNITY_EDITOR
+        UnityEditor.Handles.color = new Color(1f, 1f, 0f, 0.2f); // Semi-transparent yellow
+        Vector3 forward = transform.forward * col.radius;
+        Vector3 leftBoundary = Quaternion.Euler(0, -fovAngle / 2, 0) * forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, fovAngle / 2, 0) * forward;
+
+        UnityEditor.Handles.DrawSolidArc(transform.position, Vector3.up, leftBoundary, fovAngle, col.radius);
+#endif
     }
 }

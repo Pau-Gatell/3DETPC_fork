@@ -1,17 +1,19 @@
 using UnityEngine;
 
 using System.Collections.Generic;
+using System;
 
-public interface IState
+[Serializable]
+public abstract class IState : ScriptableObject
 {
-    void Enter();
-    void Execute();
-    void Exit();
+    public abstract void Enter();
+    public abstract void Execute();
+    public abstract void Exit();
 }
 
 public class StateMachine : MonoBehaviour
 {
-    public IState[] states;
+    [SerializeField]public IState[] states;
     private IState currentState;
 
     public void ChangeState(IState newState)
